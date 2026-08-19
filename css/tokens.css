@@ -1,0 +1,115 @@
+/* ==========================================================================
+   tokens.css — brand primitives only.
+   Colour, type scale, spacing, radii, elevation, motion. No selectors that
+   style anything; nothing here knows what a button is.
+   ========================================================================== */
+
+:root {
+  /* ---------------------------------------------------------- brand core */
+  --navy: #1d3756;
+  --navy-deep: #12263f;
+  --navy-mid: #2a4a6d;
+  --navy-tint: #e7ecf2;
+  --gold: #d4b784;
+  --gold-deep: #a88b57;
+  --gold-tint: #f7efdf;
+  --cream: #f2f1ef;
+  --paper: #fbfaf8;
+  --white: #ffffff;
+
+  /* ------------------------------------------------------------ neutrals */
+  --ink: #192435;
+  --ink-2: #3c4759;
+  --muted: #647084;
+  --faint: #8b94a3;
+  --line: #ded8cf;
+  --line-soft: #ebe6de;
+  --line-strong: #cdc4b6;
+  --wash: #f7f5f1;
+
+  /* -------------------------------------------------------------- status */
+  --ok: #2f7d62;
+  --ok-tint: #e8f2ee;
+  --warn: #ad6b24;
+  --warn-tint: #f9efe1;
+  --danger: #a14242;
+  --danger-tint: #f7eaea;
+  --info: #2f5f8f;
+  --info-tint: #e8f0f7;
+
+  /* ------------------------------------------------------- semantic roles */
+  --bg-app: var(--cream);
+  --bg-surface: var(--paper);
+  --bg-raised: var(--white);
+  --bg-sunken: var(--wash);
+  --text: var(--ink);
+  --text-soft: var(--muted);
+  --border: var(--line);
+  --focus: var(--gold-deep);
+
+  /* ---------------------------------------------------------- typography */
+  --font-head: "Space Grotesk", Inter, system-ui, sans-serif;
+  --font-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --fs-2xs: 0.688rem;  /* 11px — badges, table meta */
+  --fs-xs: 0.75rem;    /* 12px — labels, chips */
+  --fs-sm: 0.813rem;   /* 13px — dense body, grid cells */
+  --fs-base: 0.875rem; /* 14px — body */
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.375rem;
+  --fs-2xl: 1.75rem;
+
+  --lh-tight: 1.2;
+  --lh-snug: 1.35;
+  --lh-body: 1.55;
+
+  --tracking-caps: 0.08em;
+
+  /* -------------------------------------------------------------- space */
+  --s-1: 2px;
+  --s-2: 4px;
+  --s-3: 6px;
+  --s-4: 8px;
+  --s-5: 12px;
+  --s-6: 16px;
+  --s-7: 20px;
+  --s-8: 24px;
+  --s-9: 32px;
+  --s-10: 40px;
+  --s-11: 56px;
+
+  /* --------------------------------------------------------------- form */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px rgba(25, 36, 53, 0.06);
+  --shadow-sm: 0 2px 6px rgba(25, 36, 53, 0.07);
+  --shadow-md: 0 8px 24px rgba(29, 55, 86, 0.09);
+  --shadow-lg: 0 18px 50px rgba(29, 55, 86, 0.12);
+
+  --ring: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--focus);
+
+  /* -------------------------------------------------------------- motion */
+  --ease: cubic-bezier(0.2, 0, 0.13, 1);
+  --dur-fast: 90ms;
+  --dur: 160ms;
+  --dur-slow: 280ms;
+
+  /* --------------------------------------------------------------- layout */
+  --shell-max: 1560px;
+  --rail-width: 336px;
+  --header-height: 60px;
+  --crop-width: 268px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur: 0ms;
+    --dur-slow: 0ms;
+  }
+}

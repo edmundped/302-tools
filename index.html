@@ -4,199 +4,57 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>302 Data Tools</title>
-    <meta name="description" content="Client-side PDF table extraction, scraping helpers, and analyst CSV utilities.">
+    <meta name="description" content="Turn PDFs, scans, spreadsheets and images into checkable analyst tables — entirely in your browser.">
+    <meta name="color-scheme" content="light">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
   </head>
   <body>
-    <header class="app-header">
-      <div>
-        <p class="eyebrow">302 Data Tools</p>
-        <h1>Browser-side extraction desk for analyst tables.</h1>
-        <p class="header-copy">Upload PDFs, preview detected tables, export tidy and review CSVs, and handle common cleanup jobs without sending source files to a server.</p>
+    <a class="skip-link" href="#main">Skip to the workspace</a>
+
+    <header class="app-bar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">302</span>
+        <span class="brand-text">
+          <span class="brand-name">Data Tools</span>
+          <span class="brand-sub">Extraction desk for analyst tables</span>
+        </span>
       </div>
-      <div class="privacy-panel">
-        <span class="status-dot"></span>
-        <strong>Local first</strong>
-        <p>PDF uploads and CSV utilities run in this browser session. Scraping external URLs requires your configured CORS proxy.</p>
-      </div>
+
+      <nav class="tabs" id="tablist" role="tablist" aria-label="Workspace sections"></nav>
+
+      <p class="privacy-pill" title="No file you open here is uploaded anywhere.">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span>Files never leave this browser</span>
+      </p>
     </header>
 
-    <main class="app-shell">
-      <nav class="tabs" aria-label="Tool sections">
-        <button class="tab-button is-active" type="button" data-tab="extract">Extract</button>
-        <button class="tab-button" type="button" data-tab="scrape">Scrape</button>
-        <button class="tab-button" type="button" data-tab="tools">Tools</button>
-      </nav>
+    <main class="shell" id="main"></main>
 
-      <section class="tab-panel is-active" id="extract" aria-labelledby="extract-tab">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Feature A</p>
-            <h2>PDF Table Extractor</h2>
-          </div>
-          <div class="action-row">
-            <button class="secondary-button" id="clearExtract" type="button">Clear</button>
-            <button class="primary-button" id="downloadZip" type="button" disabled>Download ZIP</button>
-          </div>
-        </div>
+    <noscript>
+      <p style="padding: 24px; max-width: 60ch;">
+        302 Data Tools reads your files in the browser using JavaScript modules.
+        With JavaScript disabled there is nothing it can do — no part of this app
+        runs on a server.
+      </p>
+    </noscript>
 
-        <div class="drop-zone" id="dropZone">
-          <input id="pdfInput" type="file" accept="application/pdf,.pdf" multiple>
-          <div>
-            <strong>Drop PDFs here or choose files</strong>
-            <p>Multi-page files are scanned for text-position tables. Scanned pages are flagged for OCR review.</p>
-          </div>
-        </div>
-
-        <div class="notice">
-          <strong>Extraction note:</strong>
-          geometry clustering is a starting point for financial statements and similar tables. Keep only the tables you trust after previewing them.
-        </div>
-
-        <div id="extractStatus" class="status-line" role="status"></div>
-        <div id="fileResults" class="result-list"></div>
-      </section>
-
-      <section class="tab-panel" id="scrape">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Feature B</p>
-            <h2>Site Scraper</h2>
-          </div>
-        </div>
-
-        <div class="form-grid">
-          <label>
-            Target URL
-            <input id="scrapeUrl" type="url" placeholder="https://example.com/reports">
-          </label>
-          <label>
-            Proxy base URL
-            <input id="proxyUrl" type="url" placeholder="https://your-worker.workers.dev/">
-          </label>
-          <button class="primary-button" id="discoverSite" type="button">Discover</button>
-        </div>
-
-        <div class="notice">
-          Check the site's terms and robots.txt first. Use this for public, permitted sources only; do not bypass logins, paywalls, or rate limits.
-        </div>
-
-        <div id="scrapeStatus" class="status-line" role="status"></div>
-        <div id="scrapeResults" class="split-results"></div>
-      </section>
-
-      <section class="tab-panel" id="tools">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Utilities</p>
-            <h2>Analyst Cleanup Bench</h2>
-          </div>
-        </div>
-
-        <div class="tool-grid">
-          <article class="tool-card">
-            <h3>Number cleaner</h3>
-            <textarea id="numberInput" placeholder="Paste values, one per line"></textarea>
-            <button class="secondary-button" id="cleanNumbers" type="button">Clean</button>
-            <pre id="numberOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>Foot check</h3>
-            <textarea id="footValues" placeholder="Paste a numeric column"></textarea>
-            <input id="footTotal" type="text" placeholder="Expected total">
-            <button class="secondary-button" id="runFootCheck" type="button">Check</button>
-            <pre id="footOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>Unit normaliser</h3>
-            <textarea id="unitValues" placeholder="Paste values"></textarea>
-            <div class="compact-row">
-              <select id="unitScale">
-                <option value="1000">Thousands to units</option>
-                <option value="0.001">Units to thousands</option>
-                <option value="1000000">Millions to units</option>
-                <option value="0.000001">Units to millions</option>
-              </select>
-              <input id="unitDecimals" type="number" min="0" max="8" value="2" aria-label="Decimals">
-            </div>
-            <button class="secondary-button" id="normaliseUnits" type="button">Convert</button>
-            <pre id="unitOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>Merge CSVs</h3>
-            <input id="mergeInput" type="file" accept=".csv,text/csv" multiple>
-            <button class="secondary-button" id="mergeCsvs" type="button">Merge and download</button>
-            <pre id="mergeOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>CSV to Excel</h3>
-            <input id="xlsxInput" type="file" accept=".csv,text/csv" multiple>
-            <button class="secondary-button" id="csvToXlsx" type="button">Build workbook</button>
-            <pre id="xlsxOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>Header mapper</h3>
-            <textarea id="headerInput" placeholder="Paste CSV here"></textarea>
-            <textarea id="headerMap" placeholder="Canonical map, one per line: messy=canonical"></textarea>
-            <button class="secondary-button" id="mapHeaders" type="button">Map headers</button>
-            <pre id="headerOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>Provenance stamper</h3>
-            <textarea id="stampInput" placeholder="Paste CSV here"></textarea>
-            <div class="compact-row">
-              <input id="stampSource" type="text" placeholder="source">
-              <input id="stampPage" type="text" placeholder="page">
-            </div>
-            <button class="secondary-button" id="stampCsv" type="button">Stamp</button>
-            <pre id="stampOutput"></pre>
-          </article>
-
-          <article class="tool-card">
-            <h3>Schema validator</h3>
-            <textarea id="schemaCsv" placeholder="Paste CSV here"></textarea>
-            <input id="schemaRequired" type="text" placeholder="Required columns, comma separated">
-            <button class="secondary-button" id="validateSchema" type="button">Validate</button>
-            <pre id="schemaOutput"></pre>
-          </article>
-        </div>
-      </section>
-    </main>
-
-    <template id="tablePreviewTemplate">
-      <article class="table-card">
-        <div class="table-card-header">
-          <label class="check-label">
-            <input type="checkbox" checked>
-            <span></span>
-          </label>
-          <div class="action-row">
-            <button class="secondary-button small download-data" type="button">Data CSV</button>
-            <button class="secondary-button small download-review" type="button">Review CSV</button>
-          </div>
-        </div>
-        <div class="table-scroll"></div>
-      </article>
-    </template>
-
+    <!-- CDN libraries, pinned to exact versions. Mirrored in js/core/config.js. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="js/csv.js"></script>
-    <script src="js/pdf-extract.js"></script>
-    <script src="js/scraper.js"></script>
-    <script src="js/tools.js"></script>
-    <script src="js/app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.1.0/tesseract.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
